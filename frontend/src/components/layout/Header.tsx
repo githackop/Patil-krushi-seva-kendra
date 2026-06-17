@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-
+import { usePathname } from "next/navigation";
 import {
   Menu,
   Search,
@@ -30,6 +30,7 @@ const navLinks = [
 ];
 
 export default function Header() {
+  const pathname = usePathname();
   return (
     <>
       {/* Top Bar */}
@@ -80,13 +81,12 @@ export default function Header() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="
-                    text-sm
-                    font-medium
-                    transition-colors
-                    hover:text-green-600
-                  "
-                >
+                  className={`text-sm font-medium transition-colors hover:text-green-600 ${
+                  pathname === item.href
+                  ? "text-green-600 border-b-2 border-green-600 pb-0.5"
+                  : "text-gray-700"
+                   }`}
+                  >
                   {item.name}
                 </Link>
               ))}
@@ -138,26 +138,12 @@ export default function Header() {
               </Button>
 
               {/* Login */}
-              <Button
-  className="
-    hidden
-    md:flex
-    items-center
-    gap-2
-    rounded-full
-    bg-green-600
-    hover:bg-green-700
-    text-white
-    px-5
-    h-10
-    shadow-md
-    hover:shadow-lg
-    transition-all
-  "
->
-  <User className="h-4 w-4" />
-  Login 
-</Button>
+                <Link href="/login">
+               <Button className="hidden md:flex items-center gap-2 rounded-full bg-green-600 hover:bg-green-700 text-white px-5 h-10 shadow-md hover:shadow-lg transition-all">
+               <User className="h-4 w-4" />
+                Login
+               </Button>
+               </Link>
 
               {/* Cart */}
               <Button
@@ -207,6 +193,7 @@ export default function Header() {
 
   {/* Mobile Login Button */}
   <div className="pt-4 border-t mt-4 flex justify-center">
+     <Link href="/login">
   <Button
     className="
       w-[220px]
@@ -218,6 +205,7 @@ export default function Header() {
     <User className="mr-2 h-4 w-4" />
     Login
   </Button>
+     </Link>   
 </div>
 </SheetContent>
               </Sheet>
