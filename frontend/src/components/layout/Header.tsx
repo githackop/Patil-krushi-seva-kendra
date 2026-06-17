@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-
+import { usePathname } from "next/navigation";
 import {
   Menu,
   Search,
@@ -30,6 +30,7 @@ const navLinks = [
 ];
 
 export default function Header() {
+  const pathname = usePathname();
   return (
     <>
       {/* Top Bar */}
@@ -79,13 +80,12 @@ export default function Header() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="
-                    text-sm
-                    font-medium
-                    transition-colors
-                    hover:text-green-600
-                  "
-                >
+                  className={`text-sm font-medium transition-colors hover:text-green-600 ${
+                  pathname === item.href
+                  ? "text-green-600 border-b-2 border-green-600 pb-0.5"
+                  : "text-gray-700"
+                   }`}
+                  >
                   {item.name}
                 </Link>
               ))}
@@ -94,18 +94,11 @@ export default function Header() {
             {/* Search Bar */}
             <div className="hidden lg:flex items-center flex-1 max-w-2xl">
               
-              <Input
-              
-                placeholder="Search seeds, fertilizers, pesticides..."
-                className="
-                
-                  h-11
-                  rounded-r-none
-                  
-                  border-green-200
-                  focus-visible:ring-green-500
-                "
-              />
+              <Input placeholder="Search seeds, fertilizers, pesticides..."
+               className="h-11 rounded-r-none border-green-200 focus-visible:ring-green-500"/>
+             <Button className="h-11 rounded-l-none bg-green-600 hover:bg-green-700 px-4">
+               <Search className="h-4 w-4 text-white" />
+             </Button>
 
              
               
@@ -135,26 +128,12 @@ export default function Header() {
               </Button>
 
               {/* Login */}
-              <Button
-  className="
-    hidden
-    md:flex
-    items-center
-    gap-2
-    rounded-full
-    bg-green-600
-    hover:bg-green-700
-    text-white
-    px-5
-    h-10
-    shadow-md
-    hover:shadow-lg
-    transition-all
-  "
->
-  <User className="h-4 w-4" />
-  Login 
-</Button>
+                <Link href="/login">
+               <Button className="hidden md:flex items-center gap-2 rounded-full bg-green-600 hover:bg-green-700 text-white px-5 h-10 shadow-md hover:shadow-lg transition-all">
+               <User className="h-4 w-4" />
+                Login
+               </Button>
+               </Link>
 
               {/* Cart */}
               <Button
@@ -204,12 +183,14 @@ export default function Header() {
   </div>
 
   {/* Mobile Login Button */}
-  <div className="pt-4 border-t mt-4">
+     <div className="pt-4 border-t mt-4">
+  <Link href="/login">
     <Button className="w-full bg-green-600 hover:bg-green-700">
       <User className="mr-2 h-4 w-4" />
-      Login 
+      Login
     </Button>
-  </div>
+  </Link>
+</div>
 </SheetContent>
               </Sheet>
             </div>
