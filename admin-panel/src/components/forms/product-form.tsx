@@ -1,6 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Input } from "@/components/ui/input";
@@ -37,6 +38,12 @@ export default function ProductForm({ onSuccess }: Props) {
     const mutation = useCreateProduct();
     const { data: categories = [], isLoading: categoriesLoading } = useCategories();
 
+    const [selectedImage, setSelectedImage] = useState<File | null>(null);
+
+
+
+
+
     const {
         register,
         handleSubmit,
@@ -62,36 +69,53 @@ export default function ProductForm({ onSuccess }: Props) {
         },
     });
 
+
+
+    
     const categoryId = watch("categoryId");
     const isActive = watch("isActive");
 
     async function onSubmit(values: ProductFormValues) {
-        const extraImages = values.images
-            ? values.images
-                  .split(",")
-                  .map((url) => url.trim())
-                  .filter(Boolean)
-            : [];
 
-        await mutation.mutateAsync({
-            name: values.name,
-            slug: slugify(values.name),
-            brand: values.brand,
-            categoryId: values.categoryId,
-            image: values.image,
-            images: extraImages,
-            price: values.price,
-            discountedPrice:
-                values.discountedPrice === "" || values.discountedPrice === undefined
-                    ? undefined
-                    : Number(values.discountedPrice),
-            description: values.description,
-            uses: values.uses,
-            features: values.features || undefined,
-            cropRecommendation: values.cropRecommendation || undefined,
-            stock: values.stock,
-            isActive: values.isActive,
-        });
+        const formData = new FormData();
+
+        formData.append("name", values.name);
+        formData.append("slug", slugify(values.name));
+        formData.append("brand", values.brand);
+        formData.append("categoryId", values.categoryId);
+        formData.append("price", values.price.toString());
+        formData.append("description", values.description);
+        formData.append("uses", values.uses);
+        formData.append("stock", values.stock.toString());
+
+        if (values.discountedPrice) {
+            formData.append(
+                "discountedPrice",
+                values.discountedPrice.toString()
+            );
+        }
+
+        if (values.features) {
+            formData.append("features", values.features);
+        }
+
+        if (values.cropRecommendation) {
+            formData.append(
+                "cropRecommendation",
+                values.cropRecommendation
+            );
+        }
+
+        formData.append(
+            "isActive",
+            values.isActive.toString()
+        );
+
+        if (selectedImage) {
+            formData.append("image", selectedImage);
+        }
+
+        await mutation.mutateAsync(formData);
 
         onSuccess();
     }
@@ -235,15 +259,18 @@ export default function ProductForm({ onSuccess }: Props) {
 
                 <div className="space-y-4">
                     <div className="space-y-1.5">
-                        <Label htmlFor="image">Main Image URL</Label>
+                        <Label>Product Image</Label>
+
                         <Input
-                            id="image"
-                            placeholder="https://example.com/image.jpg"
+                            type="file"
+                            accept="image/*"
                             className="h-10 rounded-xl"
-                            aria-invalid={!!errors.image}
-                            {...register("image")}
+                            onChange={(e) => {
+                                if (e.target.files?.[0]) {
+                                    setSelectedImage(e.target.files[0]);
+                                }
+                            }}
                         />
-                        <FieldError message={errors.image?.message} />
                     </div>
 
                     <div className="space-y-1.5">
