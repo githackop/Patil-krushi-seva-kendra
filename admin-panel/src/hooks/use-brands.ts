@@ -7,6 +7,8 @@ import {
 import {
     getBrands,
     createBrand,
+    updateBrand,
+    deleteBrand,
 } from "@/services/brand.service";
 
 export function useBrands() {
@@ -21,6 +23,30 @@ export function useCreateBrand() {
 
     return useMutation({
         mutationFn: createBrand,
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["brands"],
+            });
+        },
+    });
+}
+
+export function useUpdateBrand() {
+    const queryClient =
+        useQueryClient();
+
+    return useMutation({
+        mutationFn: ({
+            id,
+            data,
+        }: {
+            id: string;
+            data: FormData;
+        }) =>
+            updateBrand(
+                id,
+                data
+            ),
 
         onSuccess: () => {
             queryClient.invalidateQueries({
@@ -29,3 +55,19 @@ export function useCreateBrand() {
         },
     });
 }
+
+export function useDeleteBrand() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: deleteBrand,
+
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["brands"],
+            });
+        },
+    });
+}
+
+

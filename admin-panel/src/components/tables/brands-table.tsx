@@ -2,9 +2,13 @@
 
 import { useMemo, useState } from "react";
 
-import { useBrands } from "@/hooks/use-brands";
+import {
+    useBrands,
+    useDeleteBrand,
+} from "@/hooks/use-brands";
 
 import AddBrandDialog from "@/components/dialogs/add-brand-dialog";
+import EditBrandDialog from "@/components/dialogs/edit-brand-dialog";
 
 import {
     Card,
@@ -31,38 +35,73 @@ import {
     Trash2,
 } from "lucide-react";
 
+import ViewBrandDialog
+    from "@/components/dialogs/view-brand-dialog";
+
+
 export default function BrandsTable() {
-    const { data: brands = [], isLoading } = useBrands();
+    const {
+        data: brands = [],
+        isLoading,
+    } = useBrands();
 
-    const [search, setSearch] = useState("");
+    const deleteMutation =
+        useDeleteBrand();
 
-    const filteredBrands = useMemo(() => {
-        const q = search.toLowerCase();
+    const [search, setSearch] =
+        useState("");
 
-        return brands.filter(
+    const [
+        selectedBrand,
+        setSelectedBrand,
+    ] = useState<any>(null);
+
+    const filteredBrands =
+        useMemo(() => {
+            const q =
+                search.toLowerCase();
+
+            return brands.filter(
+                (brand: any) =>
+                    brand.name
+                        .toLowerCase()
+                        .includes(q)
+            );
+        }, [brands, search]);
+
+    const totalBrands =
+        brands.length;
+
+    const activeBrands =
+        brands.filter(
             (brand: any) =>
-                brand.name.toLowerCase().includes(q)
-        );
-    }, [brands, search]);
-
-    const totalBrands = brands.length;
-
-    const activeBrands = brands.filter(
-        (brand: any) => brand.status
-    ).length;
+                brand.status
+        ).length;
 
     const inactiveBrands =
-        totalBrands - activeBrands;
+        totalBrands -
+        activeBrands;
+    
+    
+    
+    
+    
+    const [viewBrand, setViewBrand] =
+        useState<any>(null);
+    
+    
 
-    const totalProducts = brands.reduce(
-        (
-            sum: number,
-            brand: any
-        ) =>
-            sum +
-            (brand._count?.products || 0),
-        0
-    );
+    const totalProducts =
+        brands.reduce(
+            (
+                sum: number,
+                brand: any
+            ) =>
+                sum +
+                (brand._count
+                    ?.products || 0),
+            0
+        );
 
     if (isLoading) {
         return (
@@ -130,24 +169,26 @@ export default function BrandsTable() {
 
             </div>
 
-            {/* Search + Button */}
+            {/* Search */}
             <Card className="rounded-3xl">
                 <CardContent className="flex items-center gap-4 p-5">
 
                     <div className="relative flex-1">
 
                         <Search
-                            className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
                             size={16}
+                            className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
                         />
 
                         <Input
-                            placeholder="Search brands..."
                             value={search}
                             onChange={(e) =>
-                                setSearch(e.target.value)
+                                setSearch(
+                                    e.target.value
+                                )
                             }
-                            className="rounded-xl pl-10"
+                            placeholder="Search brands..."
+                            className="pl-10 rounded-xl"
                         />
 
                     </div>
@@ -203,6 +244,7 @@ export default function BrandsTable() {
 
                             {filteredBrands.map(
                                 (brand: any) => (
+
                                     <TableRow
                                         key={brand.id}
                                     >
@@ -210,6 +252,7 @@ export default function BrandsTable() {
                                         <TableCell>
 
                                             {brand.logo ? (
+
                                                 <img
                                                     src={
                                                         brand.logo
@@ -217,10 +260,12 @@ export default function BrandsTable() {
                                                     alt={
                                                         brand.name
                                                     }
-                                                    className="h-12 w-12 rounded-xl object-cover"
+                                                    className="h-12 w-12 rounded-xl object-cover border"
                                                 />
+
                                             ) : (
-                                                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 font-bold">
+
+                                                <div className="h-12 w-12 rounded-xl bg-green-100 flex items-center justify-center font-bold">
                                                     {brand.name
                                                         .slice(
                                                             0,
@@ -228,6 +273,7 @@ export default function BrandsTable() {
                                                         )
                                                         .toUpperCase()}
                                                 </div>
+
                                             )}
 
                                         </TableCell>
@@ -251,13 +297,17 @@ export default function BrandsTable() {
                                         <TableCell>
 
                                             {brand.status ? (
+
                                                 <Badge className="bg-green-100 text-green-700">
                                                     Active
                                                 </Badge>
+
                                             ) : (
+
                                                 <Badge className="bg-orange-100 text-orange-700">
                                                     Inactive
                                                 </Badge>
+
                                             )}
 
                                         </TableCell>
@@ -277,6 +327,9 @@ export default function BrandsTable() {
                                                 <Button
                                                     size="icon"
                                                     variant="ghost"
+                                                    onClick={() =>
+                                                        setViewBrand(brand)
+                                                    }
                                                 >
                                                     <Eye className="h-4 w-4" />
                                                 </Button>
@@ -284,6 +337,11 @@ export default function BrandsTable() {
                                                 <Button
                                                     size="icon"
                                                     variant="ghost"
+                                                    onClick={() =>
+                                                        setSelectedBrand(
+                                                            brand
+                                                        )
+                                                    }
                                                 >
                                                     <Pencil className="h-4 w-4" />
                                                 </Button>
@@ -292,6 +350,26 @@ export default function BrandsTable() {
                                                     size="icon"
                                                     variant="ghost"
                                                     className="text-red-600"
+                                                    disabled={
+                                                        deleteMutation.isPending
+                                                    }
+                                                    onClick={() => {
+
+                                                        const confirmDelete =
+                                                            window.confirm(
+                                                                `Delete ${brand.name}?`
+                                                            );
+
+                                                        if (
+                                                            !confirmDelete
+                                                        )
+                                                            return;
+
+                                                        deleteMutation.mutate(
+                                                            brand.id
+                                                        );
+
+                                                    }}
                                                 >
                                                     <Trash2 className="h-4 w-4" />
                                                 </Button>
@@ -301,6 +379,7 @@ export default function BrandsTable() {
                                         </TableCell>
 
                                     </TableRow>
+
                                 )
                             )}
 
@@ -310,6 +389,24 @@ export default function BrandsTable() {
 
                 </CardContent>
             </Card>
+
+            <EditBrandDialog
+                open={!!selectedBrand}
+                brand={selectedBrand}
+                onOpenChange={() =>
+                    setSelectedBrand(
+                        null
+                    )
+                }
+            />
+
+            <ViewBrandDialog
+                open={!!viewBrand}
+                brand={viewBrand}
+                onOpenChange={() =>
+                    setViewBrand(null)
+                }
+            />
 
         </div>
     );

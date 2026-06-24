@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -21,34 +22,22 @@ interface Props {
     onSuccess: () => void;
 }
 
-function FieldError({ message }: { message?: string }) {
-    if (!message) return null;
-
-    return (
-        <p className="text-xs text-red-500">
-            {message}
-        </p>
-    );
-}
-
-export default function BrandForm({
-    onSuccess,
-}: Props) {
-
+export default function BrandForm({ onSuccess }: Props) {
     const mutation = useCreateBrand();
+
+    const [selectedImage, setSelectedImage] =
+        useState<File | null>(null);
 
     const {
         register,
         handleSubmit,
         setValue,
         watch,
-        formState: { errors },
     } = useForm<BrandFormValues>({
         resolver: zodResolver(brandFormSchema),
 
         defaultValues: {
             name: "",
-            logo: "",
             description: "",
             status: true,
         },
@@ -56,19 +45,41 @@ export default function BrandForm({
 
     const status = watch("status");
 
-    async function onSubmit(values: BrandFormValues) {
+    async function onSubmit(
+        values: BrandFormValues
+    ) {
+        const formData = new FormData();
 
-        await mutation.mutateAsync({
-            name: values.name,
+        formData.append(
+            "name",
+            values.name
+        );
 
-            slug: slugify(values.name),
+        formData.append(
+            "slug",
+            slugify(values.name)
+        );
 
-            logo: values.logo,
+        formData.append(
+            "description",
+            values.description || ""
+        );
 
-            description: values.description,
+        formData.append(
+            "status",
+            String(values.status)
+        );
 
-            status: values.status,
-        });
+        if (selectedImage) {
+            formData.append(
+                "logo",
+                selectedImage
+            );
+        }
+
+        await mutation.mutateAsync(
+            formData
+        );
 
         onSuccess();
     }
@@ -76,61 +87,41 @@ export default function BrandForm({
     return (
         <form
             onSubmit={handleSubmit(onSubmit)}
-            className="space-y-6"
+            className="space-y-5"
         >
-
-            {/* Brand Name */}
-            <div className="space-y-2">
-
-                <Label>
-                    Brand Name
-                </Label>
+            <div>
+                <Label>Brand Name</Label>
 
                 <Input
-                    placeholder="e.g. Syngenta"
-                    className="rounded-xl"
                     {...register("name")}
+                    placeholder="Brand Name"
                 />
-
-                <FieldError
-                    message={errors.name?.message}
-                />
-
             </div>
 
-            {/* Logo URL */}
-            <div className="space-y-2">
-
-                <Label>
-                    Logo URL
-                </Label>
+            <div>
+                <Label>Brand Logo</Label>
 
                 <Input
-                    placeholder="https://..."
-                    className="rounded-xl"
-                    {...register("logo")}
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) =>
+                        setSelectedImage(
+                            e.target.files?.[0] || null
+                        )
+                    }
                 />
-
             </div>
 
-            {/* Description */}
-            <div className="space-y-2">
-
-                <Label>
-                    Description
-                </Label>
+            <div>
+                <Label>Description</Label>
 
                 <Textarea
-                    placeholder="Optional description..."
-                    className="rounded-xl"
                     {...register("description")}
+                    placeholder="Description"
                 />
-
             </div>
 
-            {/* Status */}
             <div className="flex items-center gap-3">
-
                 <Checkbox
                     checked={status}
                     onCheckedChange={(checked) =>
@@ -141,36 +132,17 @@ export default function BrandForm({
                     }
                 />
 
-                <Label>
-                    Active Brand
-                </Label>
-
+                <Label>Active Brand</Label>
             </div>
 
-            {/* Error */}
-            {mutation.isError && (
-
-                <div className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">
-
-                    Failed to create brand
-
-                </div>
-
-            )}
-
-            {/* Submit */}
             <Button
                 type="submit"
-                className="h-11 w-full rounded-xl bg-green-700 hover:bg-green-800"
-                disabled={mutation.isPending}
+                className="w-full"
             >
-
                 {mutation.isPending
                     ? "Saving..."
                     : "Save Brand"}
-
             </Button>
-
         </form>
     );
 }

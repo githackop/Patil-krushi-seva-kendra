@@ -288,6 +288,8 @@ model Product {
 
   image String?
 
+  slug String @unique
+
   categoryId String
   category   Category @relation(fields: [categoryId], references: [id])
 
@@ -327,19 +329,19 @@ model ProductVariant {
 }
 
 model Brand {
-  id String @id @default(cuid())
+  id          String   @id @default(cuid())
 
-  name String
-  slug String @unique
+  name        String
+  slug        String   @unique
 
-  logo String?
+  logo        String?
 
   description String?
 
-  status Boolean @default(true)
+  status      Boolean  @default(true)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  products    Product[]
 
-  products Product[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

@@ -10,6 +10,7 @@ import wishlistRoutes from "./routes/wishlist.routes";
 import couponRoutes from "./routes/coupon.routes";
 import reviewRoutes from "./routes/review.routes";
 import dashboardRoutes from "./routes/dashboard.routes";
+import brandRoutes from "./routes/brand.routes";
 
 const app = express();
 app.use(helmet());
@@ -37,6 +38,7 @@ app.use("/api/coupons", couponRoutes);
 app.use("/api/reviews", reviewRoutes);
 
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/brands", brandRoutes);
 
 
 app.get("/", (req, res) => {
