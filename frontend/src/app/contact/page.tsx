@@ -20,6 +20,7 @@ import {
 import {
   FaWhatsapp
 } from "react-icons/fa";
+import { DEFAULT_BANNER_IMAGE } from "@/lib/image-fallbacks";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -105,7 +106,7 @@ export default function ContactPage() {
 
     <div>
       <Image
-        src="/banner.jpg"
+        src={DEFAULT_BANNER_IMAGE}
         alt="Farm Support"
         width={700}
         height={400}

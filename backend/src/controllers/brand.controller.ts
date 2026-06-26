@@ -15,7 +15,8 @@ export const createBrandController = async (
     res: Response
 ) => {
     try {
-        let logo = "";
+        // Future Cloudflare flow: admin uploads to Cloudflare, then backend stores the returned URL as this string.
+        let logo = req.body.logo;
 
         if (req.file) {
             logo = await uploadImage(req.file);

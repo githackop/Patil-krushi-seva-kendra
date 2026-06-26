@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { DEFAULT_BRAND_IMAGE } from "@/lib/image-fallbacks";
 import { usePathname } from "next/navigation";
 import {
   Menu,
@@ -56,7 +57,7 @@ export default function Header() {
               className="flex items-center gap-3 shrink-0"
             >
               <Image
-                src="/logo.jpeg"
+                src={DEFAULT_BRAND_IMAGE}
                 alt="Patil Krushi Seva Kendra"
                width={72}
                height={62}

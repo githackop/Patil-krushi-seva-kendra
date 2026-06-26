@@ -12,6 +12,10 @@ import {
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import {
+  DEFAULT_BRAND_IMAGE,
+  getImageSrc,
+} from "@/lib/image-fallbacks";
 
 import { useBrands } from "@/hooks/use-brands";
 
@@ -85,10 +89,7 @@ export default function BrandsOverviewPage() {
                   <div className="mb-4 flex items-center gap-4">
                     <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-slate-100 bg-white p-2">
                       <Image
-                        src={
-                          brand.logo ||
-                          "/placeholder.png"
-                        }
+                        src={getImageSrc(brand.logo, DEFAULT_BRAND_IMAGE)}
                         alt={brand.name}
                         width={50}
                         height={50}

@@ -32,6 +32,27 @@ enum CouponType {
   FIXED
 }
 
+enum BannerTargetType {
+  PRODUCT
+  CATEGORY
+  BRAND
+  CUSTOM
+  NONE
+}
+
+enum BannerPlacement {
+  HOME_HERO
+  HOME_PROMO
+  CATEGORY_PAGE
+  BRAND_PAGE
+  SHOP_PAGE
+}
+
+enum BannerTextTheme {
+  LIGHT
+  DARK
+}
+
 model User {
   id String @id @default(cuid())
 
@@ -344,4 +365,42 @@ model Brand {
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Banner {
+  id String @id @default(cuid())
+
+  label String?
+
+  title String
+
+  subtitle String?
+
+  image String
+
+  mobileImage String?
+
+  buttonText String?
+
+  targetType BannerTargetType @default(NONE)
+
+  targetSlug String?
+
+  targetUrl String?
+
+  placement BannerPlacement @default(HOME_HERO)
+
+  textTheme BannerTextTheme @default(LIGHT)
+
+  status Boolean @default(true)
+
+  displayOrder Int @default(0)
+
+  startsAt DateTime?
+
+  endsAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
 }
