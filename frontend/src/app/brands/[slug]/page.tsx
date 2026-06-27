@@ -31,6 +31,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import ProductCard from "@/components/common/ProductCard";
+import {
+  DEFAULT_BANNER_IMAGE,
+  DEFAULT_BRAND_IMAGE,
+  DEFAULT_PRODUCT_IMAGE,
+} from "@/lib/image-fallbacks";
 
 // Brand mock data structure
 interface BrandDetail {
@@ -73,7 +78,7 @@ const BRAND_DATA: Record<string, BrandDetail> = {
     slug: "syngenta",
     tagline: "Global leader in agricultural innovation and science.",
     trustedBadge: "Trusted Agriculture Leader",
-    logo: "/logo.jpeg", // Using existing logo as a nice visual fallback
+    logo: DEFAULT_BRAND_IMAGE, // Using existing logo as a nice visual fallback
     description: "Syngenta is a global leader in agricultural innovation, helping farmers grow healthier crops with advanced seeds, crop protection solutions, and digital farming technologies.",
     stats: {
       products: "120+ Products",
@@ -106,7 +111,7 @@ const BRAND_DATA: Record<string, BrandDetail> = {
         originalPrice: 1600,
         rating: 4.6,
         reviews: 120,
-        image: "/Products/fertilizer_bottle.png",
+        image: DEFAULT_PRODUCT_IMAGE,
         badge: "Bestseller",
       },
       {
@@ -117,7 +122,7 @@ const BRAND_DATA: Record<string, BrandDetail> = {
         originalPrice: 1050,
         rating: 4.5,
         reviews: 85,
-        image: "/Products/fertilizer_bag.png",
+        image: DEFAULT_PRODUCT_IMAGE,
         badge: "New",
       },
       {
@@ -128,7 +133,7 @@ const BRAND_DATA: Record<string, BrandDetail> = {
         originalPrice: 1200,
         rating: 4.7,
         reviews: 98,
-        image: "/Products/fertilizer_bag.png",
+        image: DEFAULT_PRODUCT_IMAGE,
         badge: "Popular",
       },
       {
@@ -139,7 +144,7 @@ const BRAND_DATA: Record<string, BrandDetail> = {
         originalPrice: 980,
         rating: 4.4,
         reviews: 76,
-        image: "/Products/fertilizer_bottle.png",
+        image: DEFAULT_PRODUCT_IMAGE,
       },
       {
         id: 105,
@@ -149,7 +154,7 @@ const BRAND_DATA: Record<string, BrandDetail> = {
         originalPrice: 820,
         rating: 4.6,
         reviews: 64,
-        image: "/Products/fertilizer_bag.png",
+        image: DEFAULT_PRODUCT_IMAGE,
       },
       {
         id: 106,
@@ -159,7 +164,7 @@ const BRAND_DATA: Record<string, BrandDetail> = {
         originalPrice: 1300,
         rating: 4.5,
         reviews: 50,
-        image: "/Products/fertilizer_bottle.png",
+        image: DEFAULT_PRODUCT_IMAGE,
       },
     ],
   },
@@ -170,7 +175,7 @@ const defaultBrand: BrandDetail = {
   slug: "generic",
   tagline: "Leading provider of farming solutions and products.",
   trustedBadge: "Quality Verified Brand",
-  logo: "/logo.jpeg",
+  logo: DEFAULT_BRAND_IMAGE,
   description: "Providing farmers with verified agricultural products for sustainable cultivation, crop nutrition, and maximum field potential.",
   stats: {
     products: "50+ Products",
@@ -200,7 +205,7 @@ const defaultBrand: BrandDetail = {
       originalPrice: 650,
       rating: 4.5,
       reviews: 32,
-      image: "/Products/fertilizer_bottle.png",
+      image: DEFAULT_PRODUCT_IMAGE,
       badge: "Bestseller",
     },
     {
@@ -211,7 +216,7 @@ const defaultBrand: BrandDetail = {
       originalPrice: 1100,
       rating: 4.4,
       reviews: 21,
-      image: "/Products/fertilizer_bag.png",
+      image: DEFAULT_PRODUCT_IMAGE,
     },
   ],
 };
@@ -369,7 +374,7 @@ export default function BrandDetailPage({
             {/* Right Photo Area */}
             <div className="lg:col-span-5 relative w-full h-[280px] sm:h-[350px] lg:h-full min-h-[350px] overflow-hidden">
               <Image
-                src={slug === "syngenta" ? "/banners/syngenta_hero.png" : "/banners/fertilizer_banner.png"}
+                src={DEFAULT_BANNER_IMAGE}
                 alt={`${brand.name} Product Showcase`}
                 fill
                 className="object-cover object-center scale-100 hover:scale-102 transition duration-700"
@@ -608,3 +613,4 @@ export default function BrandDetailPage({
     </main>
   );
 }
+

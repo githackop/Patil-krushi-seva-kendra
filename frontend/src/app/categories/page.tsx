@@ -35,6 +35,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
+import {
+  DEFAULT_BANNER_IMAGE,
+  DEFAULT_PRODUCT_IMAGE,
+} from "@/lib/image-fallbacks";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 // Categories metadata
@@ -185,7 +189,7 @@ const FERTILIZER_PRODUCTS = [
     discount: "15% OFF",
     rating: 4.6,
     reviewCount: 120,
-    image: "/products/fertilizer_bag.png",
+    image: DEFAULT_PRODUCT_IMAGE,
     badge: "New",
     badgeColor: "bg-emerald-700",
     brand: "Yara",
@@ -201,7 +205,7 @@ const FERTILIZER_PRODUCTS = [
     discount: "16% OFF",
     rating: 4.7,
     reviewCount: 110,
-    image: "/products/fertilizer_bag.png",
+    image: DEFAULT_PRODUCT_IMAGE,
     badge: "",
     badgeColor: "",
     brand: "IFFCO",
@@ -217,7 +221,7 @@ const FERTILIZER_PRODUCTS = [
     discount: "9% OFF",
     rating: 4.7,
     reviewCount: 210,
-    image: "/products/fertilizer_bag.png",
+    image: DEFAULT_PRODUCT_IMAGE,
     badge: "",
     badgeColor: "",
     brand: "IFFCO",
@@ -233,7 +237,7 @@ const FERTILIZER_PRODUCTS = [
     discount: "18% OFF",
     rating: 4.5,
     reviewCount: 80,
-    image: "/products/fertilizer_bottle.png",
+    image: DEFAULT_PRODUCT_IMAGE,
     badge: "Sale",
     badgeColor: "bg-red-600",
     brand: "KRIBHCO",
@@ -249,7 +253,7 @@ const FERTILIZER_PRODUCTS = [
     discount: "14% OFF",
     rating: 4.6,
     reviewCount: 140,
-    image: "/products/fertilizer_bag.png",
+    image: DEFAULT_PRODUCT_IMAGE,
     badge: "",
     badgeColor: "",
     brand: "Coromandel",
@@ -265,7 +269,7 @@ const FERTILIZER_PRODUCTS = [
     discount: "14% OFF",
     rating: 4.8,
     reviewCount: 220,
-    image: "/products/fertilizer_bag.png",
+    image: DEFAULT_PRODUCT_IMAGE,
     badge: "Bestseller",
     badgeColor: "bg-amber-500",
     brand: "IFFCO",
@@ -281,7 +285,7 @@ const FERTILIZER_PRODUCTS = [
     discount: "16% OFF",
     rating: 4.5,
     reviewCount: 95,
-    image: "/products/fertilizer_bag.png",
+    image: DEFAULT_PRODUCT_IMAGE,
     badge: "",
     badgeColor: "",
     brand: "Dhanuka",
@@ -297,7 +301,7 @@ const FERTILIZER_PRODUCTS = [
     discount: "15% OFF",
     rating: 4.6,
     reviewCount: 60,
-    image: "/products/fertilizer_bottle.png",
+    image: DEFAULT_PRODUCT_IMAGE,
     badge: "New",
     badgeColor: "bg-emerald-700",
     brand: "Yara",
@@ -313,7 +317,7 @@ const FERTILIZER_PRODUCTS = [
     discount: "14% OFF",
     rating: 4.4,
     reviewCount: 50,
-    image: "/products/fertilizer_bag.png",
+    image: DEFAULT_PRODUCT_IMAGE,
     badge: "",
     badgeColor: "",
     brand: "IFFCO",
@@ -329,7 +333,7 @@ const FERTILIZER_PRODUCTS = [
     discount: "14% OFF",
     rating: 4.7,
     reviewCount: 115,
-    image: "/products/fertilizer_bottle.png",
+    image: DEFAULT_PRODUCT_IMAGE,
     badge: "",
     badgeColor: "",
     brand: "Coromandel",
@@ -345,7 +349,7 @@ const FERTILIZER_PRODUCTS = [
     discount: "14% OFF",
     rating: 4.5,
     reviewCount: 70,
-    image: "/products/fertilizer_bag.png",
+    image: DEFAULT_PRODUCT_IMAGE,
     badge: "",
     badgeColor: "",
     brand: "KRIBHCO",
@@ -361,7 +365,7 @@ const FERTILIZER_PRODUCTS = [
     discount: "14% OFF",
     rating: 4.6,
     reviewCount: 111,
-    image: "/products/fertilizer_bag.png",
+    image: DEFAULT_PRODUCT_IMAGE,
     badge: "",
     badgeColor: "",
     brand: "Dhanuka",
@@ -397,7 +401,7 @@ function getMockProductsForCategory(categorySlug: string) {
       discount: `${discountPercent}% OFF`,
       rating: 4.0 + (id % 10) * 0.1,
       reviewCount: 15 + id * 8,
-      image: isLiquid ? "/products/fertilizer_bottle.png" : "/products/fertilizer_bag.png",
+      image: isLiquid ? DEFAULT_PRODUCT_IMAGE : DEFAULT_PRODUCT_IMAGE,
       badge: id % 4 === 0 ? "New" : id % 6 === 0 ? "Sale" : "",
       badgeColor: id % 4 === 0 ? "bg-emerald-700" : "bg-red-600",
       brand: brands[id % brands.length],
@@ -806,7 +810,7 @@ function CategoriesContent() {
           {/* Banner background image (fallback to gradient if it doesn't render) */}
           <div className="absolute inset-0 z-0">
             <Image
-              src="/banners/fertilizer_banner.png"
+              src={DEFAULT_BANNER_IMAGE}
               alt={activeCategory.name}
               fill
               className="object-cover opacity-80"
@@ -1335,3 +1339,4 @@ export default function CategoriesPage() {
     </Suspense>
   );
 }
+

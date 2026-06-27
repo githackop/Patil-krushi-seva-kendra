@@ -17,7 +17,8 @@ export const createProductController = async (
 ) => {
   try {
 
-    let imageUrl = "";
+    // Future Cloudflare flow: admin uploads to Cloudflare, then backend stores the returned URL as this string.
+    let imageUrl = req.body.image;
 
     if (req.file) {
       imageUrl = await uploadImage(req.file);
@@ -113,9 +114,17 @@ export const updateProductController = async (
   res: Response
 ) => {
   try {
+    const data = {
+      ...req.body,
+    };
+
+    if (req.file) {
+      data.image = await uploadImage(req.file);
+    }
+
     const product = await updateProduct(
       req.params.id as string,
-      req.body
+      data
     );
 
     res.json({

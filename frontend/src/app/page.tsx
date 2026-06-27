@@ -4,6 +4,7 @@ import Features from "@/components/home/Features";
 import Categories from "@/components/home/Categories";
 import Brands from "@/components/home/Brands";
 import FeaturedProducts from "@/components/home/FeaturedProducts";
+import ProductsByCategory from "@/components/home/ProductsByCategory";
 import BestSelling from "@/components/home/BestSelling";
 //import Newsletter from "@/components/home/Newsletter";
 
@@ -16,6 +17,7 @@ export default function HomePage() {
   <Categories />
   <Brands />
   <FeaturedProducts />
+  <ProductsByCategory />
   <BestSelling />
 </main>
   );

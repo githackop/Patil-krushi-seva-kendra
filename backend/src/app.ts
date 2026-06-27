@@ -11,6 +11,7 @@ import couponRoutes from "./routes/coupon.routes";
 import reviewRoutes from "./routes/review.routes";
 import dashboardRoutes from "./routes/dashboard.routes";
 import brandRoutes from "./routes/brand.routes";
+import bannerRoutes from "./routes/banner.routes";
 
 const app = express();
 app.use(helmet());
@@ -39,6 +40,7 @@ app.use("/api/reviews", reviewRoutes);
 
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/brands", brandRoutes);
+app.use("/api/banners", bannerRoutes);
 
 
 app.get("/", (req, res) => {
