@@ -1,4 +1,5 @@
 import type { ShopProduct } from "@/components/shop/ProductGrid";
+import { DEFAULT_PRODUCT_IMAGE } from "@/lib/image-fallbacks";
 
 export const relatedProducts: ShopProduct[] = [
   {
@@ -7,7 +8,7 @@ export const relatedProducts: ShopProduct[] = [
     name: "Organic Soil Health Pack",
     price: 380,
     originalPrice: 450,
-    image: "/banners/banner.webp",
+    image: DEFAULT_PRODUCT_IMAGE,
     brand: "AgriCore",
     category: "Organic Products",
     productType: "Organic",
@@ -22,7 +23,7 @@ export const relatedProducts: ShopProduct[] = [
     slug: "crop-nutrition-booster",
     name: "Crop Nutrition Booster",
     price: 520,
-    image: "/banner.jpg",
+    image: DEFAULT_PRODUCT_IMAGE,
     brand: "FarmPlus",
     category: "Fertilizers",
     productType: "Granules",
@@ -37,7 +38,7 @@ export const relatedProducts: ShopProduct[] = [
     slug: "plant-care-liquid-spray",
     name: "Plant Care Liquid Spray",
     price: 290,
-    image: "/banners/banner1.webp",
+    image: DEFAULT_PRODUCT_IMAGE,
     brand: "GreenField",
     category: "Plant Protection",
     productType: "Liquid",
@@ -51,7 +52,7 @@ export const relatedProducts: ShopProduct[] = [
     slug: "field-irrigation-accessory-kit",
     name: "Field Irrigation Accessory Kit",
     price: 760,
-    image: "/banners/banner2.webp",
+    image: DEFAULT_PRODUCT_IMAGE,
     brand: "AquaGrow",
     category: "Irrigation",
     productType: "Equipment",

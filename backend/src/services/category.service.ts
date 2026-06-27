@@ -13,7 +13,20 @@ export const getAllCategories = async () => {
   return prisma.category.findMany({
     include: {
       children: true,
-      products: true,
+      products: {
+        where: {
+          status: true,
+        },
+      },
+      _count: {
+        select: {
+          products: {
+            where: {
+              status: true,
+            },
+          },
+        },
+      },
     },
     orderBy: {
       createdAt: "desc",

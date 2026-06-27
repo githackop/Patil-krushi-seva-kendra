@@ -26,7 +26,8 @@ export const createBrandController = async (
     res: Response
 ) => {
     try {
-        let logo = "";
+        // Future Cloudflare flow: admin uploads to Cloudflare, then backend stores the returned URL as this string.
+        let logo = req.body.logo;
 
         if (req.file) {
             logo = await uploadImage(req.file);
@@ -136,34 +137,5 @@ export const deleteBrandController =
 
             }
 
-            if (brand.logo) {
-
-                await deleteImage(
-                    brand.logo
-                );
-
-            }
-
-            await deleteBrand(
-                brand.id
-            );
-
-            res.json({
-                success: true,
-                message:
-                    "Brand deleted successfully",
-            });
-
-        } catch (error) {
-
-            console.error(error);
-
-            res.status(500).json({
-                success: false,
-                message:
-                    "Delete failed",
-            });
-
-        }
-
-    };
+    }
+};

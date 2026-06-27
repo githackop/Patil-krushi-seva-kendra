@@ -16,6 +16,10 @@ import {
 import ProductCard from "@/components/common/ProductCard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  DEFAULT_PRODUCT_IMAGE,
+  getImageSrc,
+} from "@/lib/image-fallbacks";
 import type { ShopProduct } from "@/components/shop/ProductGrid";
 import type { Product } from "@/types/product";
 
@@ -64,7 +68,9 @@ function formatPrice(value: Product["price"]) {
 }
 
 function getGalleryImages(product: Product) {
-  const images = [product.image, ...(product.images ?? [])].filter(Boolean);
+  const images = [product.image, ...(product.images ?? [])].map((image) =>
+    getImageSrc(image, DEFAULT_PRODUCT_IMAGE)
+  );
 
   return Array.from(new Set(images));
 }
@@ -78,14 +84,30 @@ export default function ProductDetailsClient({
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<ProductTab>("description");
 
-  const mainImage = galleryImages[activeImageIndex] ?? "/banner.jpg";
+  const mainImage = getImageSrc(
+    galleryImages[activeImageIndex],
+    DEFAULT_PRODUCT_IMAGE
+  );
   const discountedPrice = product.discountedPrice
     ? toNumber(product.discountedPrice)
     : null;
   const price = toNumber(product.price);
   const hasDiscount = discountedPrice !== null && discountedPrice < price;
-  const stockLabel = product.stock > 0 ? "In Stock" : "Out of Stock";
-  const maxQuantity = product.stock > 0 ? product.stock : 1;
+  const isAvailable =
+    typeof product.stock === "number"
+      ? product.stock > 0
+      : product.status ?? product.isActive ?? true;
+  const stockLabel = isAvailable ? "In Stock" : "Out of Stock";
+  const maxQuantity =
+    typeof product.stock === "number" && product.stock > 0
+      ? product.stock
+      : 1;
+  const brandName = product.brand?.name ?? "Generic";
+  const usageGuide =
+    product.uses ||
+    (product.usedForCrops?.length
+      ? `Recommended for: ${product.usedForCrops.join(", ")}`
+      : "Usage guide will be updated soon.");
 
   const showPreviousImage = () => {
     setActiveImageIndex((index) =>
@@ -181,7 +203,7 @@ export default function ProductDetailsClient({
 
           <p className="mt-3 text-sm text-gray-600">
             Brand:{" "}
-            <span className="font-semibold text-gray-900">{product.brand}</span>
+            <span className="font-semibold text-gray-900">{brandName}</span>
           </p>
 
           <div className="mt-5 flex flex-wrap items-end gap-3">
@@ -333,7 +355,7 @@ export default function ProductDetailsClient({
                 Usage Guide
               </h2>
               <p className="mt-3 text-sm leading-7 text-gray-600">
-                {product.uses}
+                {usageGuide}
               </p>
             </section>
           ) : null}
